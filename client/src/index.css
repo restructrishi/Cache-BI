@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+@theme {
+  --color-border: hsl(214.3 31.8% 91.4%);
+  --color-input: hsl(214.3 31.8% 91.4%);
+  --color-ring: hsl(222 47% 11%);
+  --color-background: hsl(210 40% 98%);
+  --color-foreground: hsl(222 47% 11%);
+
+  --color-primary: hsl(240 5% 10%);
+  --color-primary-foreground: hsl(210 40% 98%);
+
+  --color-secondary: hsl(210 40% 96.1%);
+  --color-secondary-foreground: hsl(222 47% 11%);
+
+  --color-destructive: hsl(0 100% 50%);
+  --color-destructive-foreground: hsl(210 40% 98%);
+
+  --color-muted: hsl(210 40% 96.1%);
+  --color-muted-foreground: hsl(215.4 16.3% 46.9%);
+
+  --color-accent: hsl(240 4.8% 95.9%);
+  --color-accent-foreground: hsl(222 47% 11%);
+
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(222 47% 11%);
+
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(222 47% 11%);
+
+  --radius-lg: 1rem;
+  --radius-md: calc(1rem - 2px);
+  --radius-sm: calc(1rem - 4px);
+
+  --font-sans: "Inter", sans-serif;
+  --font-heading: "Manrope", sans-serif;
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-fade-in: fade-in 0.3s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* Base Light Theme (Luxury) */
+:root {
+  /* Luxury Off-White Background - Cool/Neutral Tone (Notion-like) */
+  --color-background: hsl(210 20% 98%); 
+  /* Deep Charcoal Text for high contrast but not harsh black */
+  --color-foreground: hsl(222 20% 15%);
+  
+  /* Pure White Cards to pop against off-white bg */
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(222 20% 15%);
+  
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(222 20% 15%);
+  
+  /* Sophisticated Primary (Almost Black) */
+  --color-primary: hsl(222 20% 10%);
+  --color-primary-foreground: hsl(210 20% 98%);
+  
+  /* Subtle Secondary */
+  --color-secondary: hsl(210 10% 96%);
+  --color-secondary-foreground: hsl(222 20% 15%);
+  
+  /* Muted elements */
+  --color-muted: hsl(210 10% 94%);
+  --color-muted-foreground: hsl(220 10% 45%);
+  
+  /* Accents */
+  --color-accent: hsl(210 10% 94%);
+  --color-accent-foreground: hsl(222 20% 15%);
+  
+  /* Borders - Soft and subtle */
+  --color-border: hsl(220 15% 90%);
+  --color-input: hsl(220 15% 90%);
+  
+  /* Focus Ring */
+  --color-ring: hsl(222 20% 15%);
+}
+
+/* Dark Mode Overrides (Class-based) */
+.dark {
+  --color-background: hsl(222 47% 11%);
+  --color-foreground: hsl(210 40% 98%);
+  --color-card: hsl(217 33% 17%);
+  --color-card-foreground: hsl(210 40% 98%);
+  --color-popover: hsl(222 47% 11%);
+  --color-popover-foreground: hsl(210 40% 98%);
+  --color-primary: hsl(210 40% 98%);
+  --color-primary-foreground: hsl(222 47% 11%);
+  --color-secondary: hsl(217 19% 27%);
+  --color-secondary-foreground: hsl(210 40% 98%);
+  --color-muted: hsl(217 19% 27%);
+  --color-muted-foreground: hsl(215 20.2% 65.1%);
+  --color-accent: hsl(217 19% 27%);
+  --color-accent-foreground: hsl(210 40% 98%);
+  --color-border: hsl(217 19% 27%);
+  --color-input: hsl(217 19% 27%);
+}
+
+/* Custom Utilities */
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .dark .glass {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .shadow-premium {
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
+  }
+}
+
+body {
+  @apply bg-background text-foreground font-sans;
+  /* Smooth transition for theme switching */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-heading;
+}
