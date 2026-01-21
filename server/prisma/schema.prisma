@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  roleId    String
+  role      Role     @relation(fields: [roleId], references: [id])
+  teamId    String?
+  team      Team?    @relation(fields: [teamId], references: [id])
+  
+  dashboards Dashboard[]
+  auditLogs  AuditLog[]
+  approvals  ApprovalRequest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id          String @id @default(uuid())
+  name        String @unique // Admin, Sales, Viewer
+  permissions Json   // List of strings or config object
+  users       User[]
+}
+
+model Team {
+  id         String @id @default(uuid())
+  name       String @unique
+  users      User[]
+  dashboards Dashboard[]
+}
+
+model Dataset {
+  id        String   @id @default(uuid())
+  name      String
+  data      Json     // For MVP, storing array of objects
+  schema    Json     // Column types
+  ownerId   String
+  createdAt DateTime @default(now())
+  
+  visuals   Visual[]
+}
+
+model Dashboard {
+  id          String   @id @default(uuid())
+  title       String
+  layout      Json     // React-Grid-Layout array
+  published   Boolean  @default(false)
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  teamId      String?
+  team        Team?    @relation(fields: [teamId], references: [id])
+
+  visuals     Visual[]
+  filters     Filter[]
+  
+  approvalRequest ApprovalRequest?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Visual {
+  id          String   @id @default(uuid())
+  type        String   // bar, line, etc.
+  config      Json     // ECharts config, field mapping
+  datasetId   String
+  dataset     Dataset  @relation(fields: [datasetId], references: [id])
+  dashboardId String
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
+  
+  createdAt   DateTime @default(now())
+}
+
+model Filter {
+  id          String   @id @default(uuid())
+  type        String   // page, visual
+  config      Json
+  dashboardId String
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
+}
+
+model ApprovalRequest {
+  id          String   @id @default(uuid())
+  dashboardId String   @unique
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id])
+  status      String   // PENDING, APPROVED, REJECTED
+  requestedBy String
+  requester   User     @relation(fields: [requestedBy], references: [id])
+  
+  createdAt   DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String
+  entity    String   // Dashboard, Dataset
+  entityId  String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  details   Json
+  timestamp DateTime @default(now())
+}
